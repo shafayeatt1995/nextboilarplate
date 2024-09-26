@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import Header from '@/components/global/Header'
 import AuthProvider from '@/providers/AuthProvider'
+import './globals.scss'
 
 export const metadata: Metadata = {
   title: 'Next Mui Chat app',
@@ -15,7 +15,6 @@ export default function RootLayout({
     <html lang="en">
       <AuthProvider>
         <body>
-          <Header />
           <main>{children}</main>
         </body>
       </AuthProvider>

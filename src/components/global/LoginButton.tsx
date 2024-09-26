@@ -13,7 +13,6 @@ function LoginButton() {
       {status !== 'authenticated' ? (
         <>
           <Link href="/login">Login</Link>
-          <Link href="/register">Register</Link>
         </>
       ) : (
         <>

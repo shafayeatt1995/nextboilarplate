@@ -9,12 +9,14 @@ export const authOptions: NextAuthOptions = {
       name: 'credentials',
       credentials: {},
       async authorize(credentials, req) {
-        const { email, password } = credentials as {
+        const { email, password, id, provider } = credentials as {
           email: string
           password: string
+          id?: string
+          provider?: string
         }
         try {
-          const res = await login({ email, password })
+          const res = await login({ email, password, id, provider })
           if (!res.ok) {
             return null
           }
@@ -30,9 +32,19 @@ export const authOptions: NextAuthOptions = {
       return { ...token, ...user }
     },
     async session({ session, token }) {
-      const { _id, name, email, type } = token.user as typeof session.user
+      const { _id, name, email, type, socialAccount, provider } =
+        token.user as typeof session.user
       const accessToken = token.token as string
-      session.user = { _id, name, email, type, accessToken }
+
+      session.user = {
+        _id,
+        name,
+        email,
+        type,
+        socialAccount,
+        provider,
+        accessToken,
+      }
       return session
     },
   },

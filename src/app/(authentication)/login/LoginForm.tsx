@@ -3,6 +3,7 @@
 import React, { FormEvent, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { setItem } from '@/utils'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -18,32 +19,49 @@ export default function LoginForm() {
       redirect: false,
     })
 
-    res?.error ? console.log(res.error) : router.push('/dashboard')
+    res?.error ? '' : router.push('/dashboard')
+  }
+  const socialSignIn = (provider: string): void => {
+    const { pathname, search } = new URL(window.location.href)
+
+    setItem('socialLogin', pathname + search)
+    window.open(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/social-login/${provider}`,
+      '_self'
+    )
   }
 
   return (
-    <form onSubmit={submit}>
-      <input
-        required
-        id="email"
-        name="email"
-        autoComplete="email"
-        autoFocus
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        required
-        name="password"
-        type="password"
-        id="password"
-        autoComplete="current-password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div>
+      <form onSubmit={submit}>
+        <input
+          required
+          id="email"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
+        <input
+          required
+          name="password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        <button type="submit">Login</button>
+      </form>
+      <button
+        className=" mt-5 bg-red-600"
+        onClick={() => socialSignIn('google')}
+      >
+        Google login
+      </button>
+    </div>
   )
 }

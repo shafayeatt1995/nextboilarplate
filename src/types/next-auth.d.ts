@@ -9,6 +9,8 @@ declare module 'next-auth' {
       name: string
       email: string
       type: string
+      socialAccount: boolean
+      provider: string
       accessToken: string
     }
   }
